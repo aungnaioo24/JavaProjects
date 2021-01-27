@@ -1,0 +1,37 @@
+package anoConstest;
+
+import java.awt.FlowLayout;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class MainScreen extends JFrame{
+
+	JLabel nameLb, passLb;
+	JTextField nameTf;
+	JPasswordField passTf;
+	JButton loginBtn;
+	
+	public MainScreen() {
+		
+		nameLb = new JLabel("Name:");
+		passLb = new JLabel("Password: ");
+		nameTf = new JTextField(25);
+		passTf = new JPasswordField(25);
+		loginBtn = new JButton("Login");
+		
+		setLayout(null);
+		nameLb.setBounds(100, 100, 100, 40);
+		nameTf.setBounds(200, 100, 200, 40);
+		passLb.setBounds(100, 170, 100, 40);
+		passTf.setBounds(200, 170, 200, 40);
+		
+		add(nameLb);
+		add(nameTf);
+	}
+	
+}

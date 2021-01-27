@@ -1,0 +1,28 @@
+package anoConstest;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
+public class TimerTest {
+
+	private static int count = 0;
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Timer timer = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+		});
+		
+		timer.stop();
+		
+	}
+
+}

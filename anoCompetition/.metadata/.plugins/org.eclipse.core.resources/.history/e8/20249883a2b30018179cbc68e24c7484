@@ -1,0 +1,273 @@
+package anoConstest;
+
+import java.awt.*;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.*;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.table.*;
+import com.mysql.jdbc.Statement;
+
+public class AdminPage extends JFrame{
+	
+	JLabel titleLb;
+	JPanel timerPanel;
+	JLabel timerTf;
+	JButton startBtn, resetBtn, pauseBtn, addTeanBtn;
+	int second = 3600;
+	int count = 0;
+	Timer timer;
+	JTable contestTable;
+	DefaultTableModel tmodel;
+	//String tableColumns[] = {"Rank", "Team", "Point", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11"};
+	String tableColumns[];
+	AdminDB db;
+	int markDatas[];
+	
+	public AdminPage() {
+		
+		db = new AdminDB();
+		
+		titleLb = new JLabel("Adminstartion");
+		titleLb.setFont(new Font("Arial", Font.PLAIN, 32));
+		
+		Font timerFont = new Font("Arial", Font.PLAIN, 24);
+		
+		timerTf =  new JLabel("1:0:0");
+		timerTf.setOpaque(true);
+		timerTf.setBackground(Color.BLACK);
+		timerTf.setForeground(Color.WHITE);
+		timerTf.setFont(timerFont);
+		timerTf.setHorizontalAlignment(JTextField.CENTER);
+		
+		startBtn = new JButton("Start");
+		startBtn.setBackground(Color.BLUE);
+		startBtn.setForeground(Color.WHITE);
+		startBtn.setFont(timerFont);
+		startBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				startBtnActionListener();
+				
+			}
+		});
+		
+		resetBtn = new JButton("Reset");
+		resetBtn.setBackground(Color.BLUE);
+		resetBtn.setForeground(Color.WHITE);
+		resetBtn.setFont(timerFont);
+		
+		resetBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				resetBtnActionListener();
+				
+			}
+		});
+		
+		pauseBtn = new JButton("Pause");
+		pauseBtn.setBackground(Color.BLUE);
+		pauseBtn.setForeground(Color.WHITE);
+		pauseBtn.setFont(timerFont);
+		
+		pauseBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				pauseBtnActionListener();
+				
+			}
+		});
+		
+		addTeanBtn = new JButton("Add Team");
+		addTeanBtn.setBackground(Color.GREEN);
+		addTeanBtn.setForeground(Color.WHITE);
+		addTeanBtn.setFont(timerFont);
+		
+		timerPanel = new JPanel();
+		
+		GridLayout timerglayout = new GridLayout(1, 4);
+		timerglayout.setHgap(5);
+		timerglayout.setVgap(5);
+		timerPanel.setLayout(timerglayout);
+		timerPanel.add(timerTf);
+		timerPanel.add(startBtn);
+		timerPanel.add(pauseBtn);
+		timerPanel.add(resetBtn);
+		
+		contestTable = new JTable();
+		tmodel = new DefaultTableModel();
+		
+		loadTableColumn();
+		
+		tmodel.setColumnIdentifiers(tableColumns);
+		contestTable.setModel(tmodel);
+		
+		loadContestData();
+		
+		contestTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		contestTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+		contestTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+		contestTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+		
+		for (int i = 3; i < tableColumns.length; i++) {
+			contestTable.getColumnModel().getColumn(i).setPreferredWidth(130);
+		}
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(contestTable.getModel());
+		contestTable.setRowSorter(sorter);
+		
+		java.util.List<E>
+		
+		JTableHeader thead = contestTable.getTableHeader();
+		thead.setBackground(Color.decode("#3d0060"));
+		thead.setForeground(Color.WHITE);
+		thead.setFont(new Font("Arial", Font.PLAIN, 18));
+		thead.setReorderingAllowed(false);
+		
+		JScrollPane scrollTable = new JScrollPane(contestTable);
+		scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		titleLb.setBounds(30, 30, 250, 35);
+		timerPanel.setBounds(30, 75, 500, 60);
+		scrollTable.setBounds(30, 145, 1240, 450);
+		addTeanBtn.setBounds(30, 605, 150, 60);
+		
+		setLayout(null);
+		add(titleLb);
+		add(timerPanel);
+		add(scrollTable);
+		add(addTeanBtn);
+		
+	}
+	
+	public void loadTableColumn() {
+		
+		ResultSet result = db.loadColumn();
+		
+		try {
+			while(result.next()) {
+				count++;
+			}
+			
+			tableColumns = new String[count+3];
+			
+			tableColumns[0] = "Rank";
+			tableColumns[1] = "Team";
+			tableColumns[2] = "Point";
+			
+			int i = 3;
+			result.beforeFirst();
+			
+			while(result.next()) {
+				tableColumns[i] = result.getString("title");
+				i++;
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void loadContestData() {
+		
+		ResultSet result = db.loadTeams();
+		String team;
+		int id;
+		markDatas = new int[count];
+		
+		try {
+			
+			int rank = 0;
+			while(result.next()) {
+				rank++;
+				
+				team = result.getString("name");
+				id = result.getInt("id");
+				
+				ResultSet innerResult = db.loadResults(id);
+				
+				int i=0;
+				int total = 0;
+				while(innerResult.next()) {
+					
+					innerResult.getString("title");
+					
+					markDatas[i] = innerResult.getInt("status");
+					total += markDatas[i];
+					i++;
+				}
+				
+				Object obj[] = new Object[count+3];
+				obj[0] = rank;
+				obj[1] = team;
+				obj[2] = total;
+				
+				int k=0;
+				for(int j = 3; j<obj.length; j++) {
+					obj[j] = markDatas[k];
+					k++;
+				}
+				
+				for(int z=0; z<8; z++) {
+					System.out.print(obj[z]);
+				}
+				System.out.println();
+				
+				tmodel = (DefaultTableModel) contestTable.getModel();
+				tmodel.addRow(obj);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void startBtnActionListener() {
+		
+		timer = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				count--;
+				timerTf.setText(""+(second/3600)+" : "+((second%3600)/60)+" : "+((second%3600)%60));
+			}
+		});
+		timer.start();
+	}
+	
+	public void pauseBtnActionListener() {
+		
+		try {
+			timer.stop();
+		}catch(Exception e) {
+			
+		}
+		
+	}
+	
+	public void resetBtnActionListener() {
+		
+		try {
+			timer.stop();
+		}catch(Exception e) {
+			
+		}
+		
+		second = 3600;
+		timerTf.setText(""+(second/3600)+" : "+((second%3600)/60)+" : "+((second%3600)%60));
+	}
+	
+}

@@ -1,0 +1,7 @@
+package anoConstest;
+
+public class AdminDB extends DB_Config{
+
+	
+	
+}

@@ -1,0 +1,13 @@
+package javaMVC;
+
+import javax.swing.JFrame;
+
+public class View extends JFrame{
+
+	public View() {
+		
+		super("MVC");
+		
+	}
+	
+}

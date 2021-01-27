@@ -1,0 +1,41 @@
+package anoConstest;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+public class AdminDB extends DB_Config{
+
+	public ResultSet loadColumn() {
+		
+		String [] a = null;
+		
+		Statement stm;
+		ResultSet result = null;
+		
+		try {
+			
+			stm = conn.createStatement();
+			result = stm.executeQuery("SELECT title FROM questions");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+	
+	public ResultSet loadTeams() {
+		
+		Statement stm;
+		ResultSet result = null;
+		
+		stm = conn.createStatement();
+		
+		return result;
+	}
+	
+}

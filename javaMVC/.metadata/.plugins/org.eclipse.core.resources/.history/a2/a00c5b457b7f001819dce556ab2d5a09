@@ -1,0 +1,23 @@
+package javaMVC;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class View extends JFrame{
+
+	private JLabel fnum_lb, snum_lb;
+	
+	public View() {
+		
+		super("MVC");
+		
+		
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(950, 150);
+		setLocation(200, 300);
+		setVisible(true);
+		
+	}
+	
+}

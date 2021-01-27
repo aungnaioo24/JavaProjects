@@ -1,0 +1,15 @@
+package anoConstest;
+
+import javax.swing.JFrame;
+
+public class AdminPage extends JFrame{
+
+	
+	
+	public AdminPage() {
+		
+		
+		
+	}
+	
+}

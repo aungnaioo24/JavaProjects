@@ -1,0 +1,23 @@
+package javaMVC;
+
+class Controller{
+	
+	public Controller(View view, Model model) {
+		
+		
+		
+	}
+	
+}
+
+public class MVC {
+
+	public static void main(String[] args) {
+		
+		View view = new View();
+		Model model = new Model();
+		new Controller();
+		
+	}
+
+}

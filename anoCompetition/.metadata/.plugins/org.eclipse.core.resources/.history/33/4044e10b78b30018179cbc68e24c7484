@@ -1,0 +1,30 @@
+package anoConstest;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.mysql.jdbc.Statement;
+
+public class AdminDB extends DB_Config{
+
+	public String[] loadColumn() {
+		
+		String [] a = null;
+		
+		Statement stm;
+		ResultSet result = null;
+		
+		try {
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return a;
+	}
+	
+}

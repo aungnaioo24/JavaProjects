@@ -1,0 +1,11 @@
+package javaMVC;
+
+public class Model {
+
+	public void add_btnListener(int fnum, snum) {
+		
+		
+		
+	}
+	
+}

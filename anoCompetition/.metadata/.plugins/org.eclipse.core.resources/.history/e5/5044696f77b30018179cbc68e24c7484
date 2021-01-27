@@ -1,0 +1,12 @@
+package anoConstest;
+
+public class AdminDB extends DB_Config{
+
+	public String[] loadColumn() {
+		
+		String [] a = null;
+		
+		return 
+	}
+	
+}

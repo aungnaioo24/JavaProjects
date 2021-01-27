@@ -1,0 +1,41 @@
+package javaMVC;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class View extends JFrame{
+
+	private JLabel fnum_lb, snum_lb;
+	private JTextField fnum_tf, snum_tf;
+	private JButton add_btn;
+	
+	public View() {
+		
+		super("MVC");
+		
+		setLayout(new FlowLayout());
+		
+		fnum_lb = new JLabel("First Number");
+		snum_lb = new JLabel("Second Number");
+		fnum_tf = new JTextField(5);
+		snum_tf = new JTextField(5);
+		add_btn = new JButton("Add");
+		
+		add(fnum_lb);
+		add(fnum_tf);
+		add(snum_lb);
+		add(snum_tf);
+		add(add_btn);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(950, 150);
+		setLocation(200, 300);
+		setVisible(true);
+		
+	}
+	
+}

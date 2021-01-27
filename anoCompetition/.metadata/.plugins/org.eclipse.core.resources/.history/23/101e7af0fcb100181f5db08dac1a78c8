@@ -1,0 +1,154 @@
+package anoConstest;
+
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+public class AdminPage extends JFrame{
+	
+	JLabel titleLb;
+	JPanel timerPanel;
+	JLabel timerTf;
+	JButton startBtn, resetBtn, pauseBtn;
+	int count = 3600;
+	Timer timer;
+	JTable contestTable;
+	DefaultTableModel tmodel;
+	String tableColumns[] = {"Rank", "Team", "Point", "Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11"};
+	
+	public AdminPage() {
+		
+		titleLb = new JLabel("Adminstartion");
+		titleLb.setFont(new Font("Arial", Font.PLAIN, 32));
+		
+		Font timerFont = new Font("Arial", Font.PLAIN, 24);
+		
+		timerTf =  new JLabel("1:0:0");
+		timerTf.setOpaque(true);
+		timerTf.setBackground(Color.BLACK);
+		timerTf.setForeground(Color.WHITE);
+		timerTf.setFont(timerFont);
+		timerTf.setHorizontalAlignment(JTextField.CENTER);
+		
+		startBtn = new JButton("Start");
+		startBtn.setBackground(Color.BLUE);
+		startBtn.setForeground(Color.WHITE);
+		startBtn.setFont(timerFont);
+		startBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				startBtnActionListener();
+				
+			}
+		});
+		
+		resetBtn = new JButton("Reset");
+		resetBtn.setBackground(Color.BLUE);
+		resetBtn.setForeground(Color.WHITE);
+		resetBtn.setFont(timerFont);
+		
+		resetBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				resetBtnActionListener();
+				
+			}
+		});
+		
+		pauseBtn = new JButton("Pause");
+		pauseBtn.setBackground(Color.BLUE);
+		pauseBtn.setForeground(Color.WHITE);
+		pauseBtn.setFont(timerFont);
+		
+		pauseBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				pauseBtnActionListener();
+				
+			}
+		});
+		
+		timerPanel = new JPanel();
+		
+		GridLayout timerglayout = new GridLayout(1, 4);
+		timerglayout.setHgap(5);
+		timerglayout.setVgap(5);
+		timerPanel.setLayout(timerglayout);
+		timerPanel.add(timerTf);
+		timerPanel.add(startBtn);
+		timerPanel.add(pauseBtn);
+		timerPanel.add(resetBtn);
+		
+		contestTable = new JTable();
+		tmodel = new DefaultTableModel();
+		tmodel.setColumnIdentifiers(tableColumns);
+		contestTable.setModel(tmodel);
+		contestTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+		contestTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+		contestTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+		
+		for(int i=3; i>tableColumns.length; i++) {
+			contestTable.getColumnModel().getColumn(i).setPreferredWidth(120);
+		}
+		
+		JTableHeader thead = contestTable.getTableHeader();
+		thead.setBackground(Color.decode("#3d0060"));
+		thead.setForeground(Color.WHITE);
+		thead.setFont(new Font("Arial", Font.PLAIN, 18));
+		
+		JScrollPane scrollTable = new JScrollPane(contestTable);
+		scrollTable.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollTable.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		titleLb.setBounds(30, 30, 250, 35);
+		timerPanel.setBounds(30, 75, 500, 60);
+		scrollTable.setBounds(30, 145, 1000, 500);
+		
+		setLayout(null);
+		add(titleLb);
+		add(timerPanel);
+		add(scrollTable);
+		
+	}
+	
+	public void startBtnActionListener() {
+		
+		timer = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				count--;
+				timerTf.setText(""+(count/3600)+" : "+((count%3600)/60)+" : "+((count%3600)%60));
+			}
+		});
+		timer.start();
+	}
+	
+	public void pauseBtnActionListener() {
+		timer.stop();
+	}
+	
+	public void resetBtnActionListener() {
+		timer.stop();
+		count = 3600;
+		timerTf.setText(""+(count/3600)+" : "+((count%3600)/60)+" : "+((count%3600)%60));
+	}
+	
+}

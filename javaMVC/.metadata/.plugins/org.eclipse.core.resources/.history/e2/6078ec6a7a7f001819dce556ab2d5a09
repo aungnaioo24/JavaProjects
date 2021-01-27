@@ -1,0 +1,17 @@
+package javaMVC;
+
+class Controller{
+	
+	
+	
+}
+
+public class MVC {
+
+	public static void main(String[] args) {
+		
+		
+		
+	}
+
+}

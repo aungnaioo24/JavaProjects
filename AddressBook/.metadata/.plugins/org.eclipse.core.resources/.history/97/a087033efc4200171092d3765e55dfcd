@@ -1,0 +1,199 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PersonQueries {
+
+	private static final String URL = "jdbc:mysql://localhost:3306/addressbook";
+	private static final String USERNAME = "root";
+	private static final String PASSWORD = "";
+	
+	private Connection conet = null;
+	private PreparedStatement selectAllPeople = null;
+	private PreparedStatement selectPeopleByLastName = null;
+	private PreparedStatement insertNewPerson = null;
+	
+	public PersonQueries(){
+		
+		try{
+			
+			Class.forName("com.mysql.jdbc.Driver");
+			conet = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			
+			selectAllPeople = conet.prepareStatement("SELECT * FROM addresses");
+			selectPeopleByLastName = conet.prepareStatement("SELECT * FROM addresses WHERE last_name = ?");
+			insertNewPerson = conet.prepareStatement("INSERT INTO addresses " +
+					"(first_name, last_name, email, phone_number) " +
+					"VALUES (?, ?, ?, ?)");
+			
+		}catch(SQLException sqe){
+			
+			sqe.printStackTrace();
+			System.exit(1);
+			
+		}catch (ClassNotFoundException cnf) {
+			
+			cnf.printStackTrace();
+			System.exit(1);
+			
+		}
+		
+	}
+	
+	public List<Person> getAllPeople(){
+		
+		List< Person > results = null;
+		ResultSet reset = null;
+		
+		try{
+			
+			reset = selectAllPeople.executeQuery();
+			results = new ArrayList< Person >();
+					
+			while(reset.next()){
+				
+				results.add(new Person(
+						
+						reset.getInt("address_id"),
+						reset.getString("first_name"),
+						reset.getString("last_name"),
+						reset.getString("email"),
+						reset.getString("phone_number")
+						
+				));
+				
+			}
+			
+		}catch(SQLException sqe){
+			
+			sqe.printStackTrace();
+			
+		}
+		
+		finally{
+			
+			try{
+				
+				reset.close();
+				
+			}catch(SQLException sqe){
+				
+				sqe.printStackTrace();
+				close();
+				
+			}
+			
+		}
+		
+		return results;
+		
+	}
+	
+	public List<Person> getPeopleByLastName(String name){
+		
+		List< Person > results = null;
+		ResultSet reset = null;
+		
+		try{
+			
+			selectPeopleByLastName.setString(1, name);
+			reset = selectPeopleByLastName.executeQuery();
+			results = new ArrayList< Person >();
+					
+			while(reset.next()){
+				
+				results.add(new Person(
+						
+						reset.getInt("address_id"),
+						reset.getString("first_name"),
+						reset.getString("last_name"),
+						reset.getString("email"),
+						reset.getString("phone_number")
+						
+						));
+				
+			}
+			
+		}catch(SQLException sqe){
+			
+			sqe.printStackTrace();
+			
+		}
+		
+		finally{
+			
+			try{
+				
+				reset.close();
+				
+			}catch(SQLException sqe){
+				
+				sqe.printStackTrace();
+				close();
+				
+			}
+			
+		}
+		
+		return results;
+		
+	} 
+	
+	public int addPerson(String fname, String lname, String email, String num){
+		
+		int result = 0;
+		
+		try{
+			
+			insertNewPerson.setString(1, fname);
+			insertNewPerson.setString(2, lname);
+			insertNewPerson.setString(3, email);
+			insertNewPerson.setString(4, num);
+			
+			result = insertNewPerson.executeUpdate();
+			
+		}catch(SQLException sqe){
+			
+			sqe.printStackTrace();
+			close();
+			
+		}
+
+		finally{
+			
+			try{
+				
+				reset.close();
+				
+			}catch(SQLException sqe){
+				
+				sqe.printStackTrace();
+				close();
+				
+			}
+			
+		}
+		
+		return result;
+		
+	}
+
+	public void close() {
+		
+		try{
+			
+			conet.close();
+			
+		}catch(SQLException sqe){
+			
+			sqe.printStackTrace();
+			
+		}
+		
+	}
+	
+}

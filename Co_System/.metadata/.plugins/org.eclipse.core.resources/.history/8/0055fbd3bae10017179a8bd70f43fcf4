@@ -1,0 +1,141 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+
+public class postion extends JFrame{
+
+	JTable pstTable;
+	String colname[] = {"No", "Position Name", "Position ID", "Salary", "Target Bonus", "Leave Bonus"};
+	JLabel title;
+	dbConnect conection;
+	ResultSet tbrst;
+	JButton addb, editb, exitb;
+	DefaultTableModel model;
+	
+	public postion(){
+		
+		super("Company System");
+		
+		conection = new dbConnect();
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setSize(1366, 735);
+		setLocation(0, 0);
+		setResizable(false);
+		
+		Font font = new Font("Serif", Font.PLAIN, 30);
+		Font fontt = new Font("Serif", Font.PLAIN, 20);
+		
+		title = new JLabel("Positions Table");
+		title.setFont(font);
+		title.setForeground(Color.decode("#380101"));
+		title.setBounds(100, 130, 200, 25);
+		
+		pstTable = new JTable();
+		pstTable.enable(false);
+		pstTable.setFillsViewportHeight(true);
+		pstTable.setRowHeight(30);
+		pstTable.getTableHeader().setFont(new Font("Serif", Font.PLAIN, 23));
+		pstTable.getTableHeader().setReorderingAllowed(false);
+		pstTable.setFont(fontt);
+		JScrollPane scroll = new JScrollPane(pstTable);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroll.setBounds(100, 165, 1150, 300);
+		
+		addb = new JButton("Add Position");
+		addb.setFont(fontt);
+		addb.setBounds(100, 500, 200, 60);
+		editb = new JButton("Edit Position");
+		editb.setFont(fontt);
+		editb.setBounds(310, 500, 200, 60);
+		
+		showPosition();
+		
+		addb.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				
+			}
+		});
+		
+		bgPanel2 bgP2 = new bgPanel2();
+		bgP2.setLayout(null);
+		
+		add(title);
+		add(scroll);
+		add(addb);
+		add(editb);
+		
+		add(bgP2, BorderLayout.CENTER);
+		
+		addWindowListener(new WindowAdapter() {
+			
+			public void windowClosing(WindowEvent we){
+				new index();
+				conection.conClose();
+			}
+		});
+		
+		setVisible(true);
+		
+	}
+	
+	private void showPosition(){
+		
+		model = new DefaultTableModel();
+		model.setColumnIdentifiers(colname);
+		pstTable.setModel(model);
+		
+		int notc = 0;
+		String nametc = "";
+		String pstIDtc = "";
+		int saltc = 0;
+		int TBnstc = 0;
+		int LBnstc = 0;
+		
+		tbrst = conection.getAllPosition();
+		
+		try {
+			while(tbrst.next()){
+				
+				++notc;
+				nametc = tbrst.getString("p_name");
+				pstIDtc = tbrst.getString("p_positionID");
+				saltc= tbrst.getInt("p_salary");
+				TBnstc = tbrst.getInt("p_TBonus");
+				LBnstc = tbrst.getInt("p_LBonus");
+				model.addRow(new Object[]{notc, nametc, pstIDtc, saltc, TBnstc, LBnstc});
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			conection.conClose();
+		}finally{
+			try {
+				tbrst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				conection.conClose();
+			}
+		}
+		
+	}
+	
+}

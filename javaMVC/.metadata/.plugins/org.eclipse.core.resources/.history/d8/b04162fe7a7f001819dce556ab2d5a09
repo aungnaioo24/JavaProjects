@@ -1,0 +1,20 @@
+package javaMVC;
+
+import javax.swing.JFrame;
+
+public class View extends JFrame{
+
+	public View() {
+		
+		super("MVC");
+		
+		
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(800, 200);
+		setLocation(200, 40);
+		setVisible(true);
+		
+	}
+	
+}

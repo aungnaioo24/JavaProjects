@@ -1,0 +1,30 @@
+package anoConstest;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Timer;
+
+public class TimerTest {
+
+	private static int count = 0;
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Timer time = new Timer(true);
+		
+		ActionListener a = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				System.out.println(count);
+				count++;
+				
+			}
+		};
+		
+	}
+
+}

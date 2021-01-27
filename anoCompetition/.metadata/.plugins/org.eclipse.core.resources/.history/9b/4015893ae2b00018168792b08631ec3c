@@ -1,0 +1,18 @@
+package anoConstest;
+
+import javax.swing.JFrame;
+
+public class MainClass {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		MainScreen ms = new MainScreen();
+		ms.setTitle("Adminstration Login");
+		ms.setSize(200, 150);
+		ms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ms.setLocation(280, 150);
+		
+	}
+
+}
